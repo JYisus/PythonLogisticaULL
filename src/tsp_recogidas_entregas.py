@@ -60,7 +60,6 @@ for i in range(1,nodes):
 
 for i in range(nodes):
     solver.Add((solver.Sum([f[j,i] for j in range(nodes)])-solver.Sum([f[i,j] for j in range(nodes)])) == d[i])
-    #solver.Add(solver.Sum(f[i,j] for i in range(1,nodes) for j in range(1,nodes))-solver.Sum[j,i] for i in range(1,nodes) for j in range(1,nodes))
 for i in range(nodes):
     for j in range(nodes):
         solver.Add(0<=f[i,j]<=Q*x[i,j])
