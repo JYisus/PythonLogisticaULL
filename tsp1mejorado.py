@@ -1,7 +1,7 @@
 from ortools.linear_solver import pywraplp
 import random as rand
 
-solver = pywraplp.Solver('TSP', pywraplp.Solver.CBC_MIXED_INTEGER_PROGRAMMING)
+solver = pywraplp.Solver('TSP2', pywraplp.Solver.CBC_MIXED_INTEGER_PROGRAMMING)
 
 # x and y are integer non-negative variables.
 nodes = 4
@@ -14,7 +14,7 @@ for i in range(nodes):
     cost.append(row)
 for i in range(nodes):
     cost[i][i] = 0
-#print(cost)
+print(cost)
 # cost = [[0,10,15,20],
 #    [10,0,35,25],
 #    [15,35,0,30],
@@ -37,20 +37,8 @@ for j in range(nodes):
 
 for i in range(1,nodes):
     for j in range(1,nodes):
-        solver.Add(u[j]>=(u[i]+x[i,j]-(nodes-2)*(1-x[i,j])))
+        solver.Add(u[j]>=(u[i]+x[i,j]-(nodes-2)*(1-x[i,j])+(nodes-3)*x[j,i]))
 
 sol = solver.Solve()
 if sol == solver.OPTIMAL:
         print('Costo total =', solver.Objective().Value())
-        recorrido = '0'
-        i=0
-        while i != -1:
-            for j in range(nodes):
-                if x[i, j].solution_value() > 0:
-                    recorrido += ' -c(' + str(cost[i][j]) +')-> ' + str(j)
-                    aux = j
-            if aux != 0:
-                i = aux
-            else:
-                i = -1
-        print(recorrido)
