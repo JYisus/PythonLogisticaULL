@@ -2,7 +2,7 @@
 Problema del viajante de comercio (TSP) resuelto con **Pyhton** y **Or-Tools**.
 En cada archivo se encuentra un modelo diferente para abordar la eliminación de subtours.
 ## Modelo con Ui
-### tsp.py
+### [tsp.py](https://github.com/alu0100976731/python_logistica/blob/master/src/tsp.py)
 Contiene el modelo del TSP solucionando el problema de los subtours con el uso de Ui.
 #### Definición de las variables
 ```
@@ -16,7 +16,7 @@ for i in range(1,nodes):
     for j in range(1,nodes):
         solver.Add(u[j]>=(u[i]+x[i,j]-(nodes-2)*(1-x[i,j])))
 ```
-### tsp1mejorado.py
+### [tsp1mejorado.py](https://github.com/alu0100976731/python_logistica/blob/master/src/tsp1mejorado.py)
 Mejora el modelo anterior de las Uij reforzando las restricciones
 ```
 for i in range(1,nodes):
@@ -24,7 +24,7 @@ for i in range(1,nodes):
         solver.Add(u[j]>=(u[i]+x[i,j]-(nodes-2)*(1-x[i,j])+(nodes-3)*x[j,i]))
 ```
 ## Modelo con Vij
-### tsp2.py
+### [tsp2.py](https://github.com/alu0100976731/python_logistica/blob/master/src/tsp2.py)
 Contiene el modelo del TSP solucionando el problema de los subtours con el uso de Vij.
 #### Definición de las variables
 ```
@@ -54,7 +54,7 @@ for i in range(1,nodes):
             solver.Add(x[i,j] <= v[i,j])
 ```
 ## Modelo con flujos (fij)
-### tsp_flujo.py
+### [tsp_flujo.py](https://github.com/alu0100976731/python_logistica/blob/master/src/tsp_flujo.py)
 Contiene el modelo del TSP solucionando el problema de los subtours con el uso de fij.
 #### Definición de las variables
 ```
@@ -71,7 +71,7 @@ for i in range(nodes):
     for j in range(nodes):
         solver.Add(0<=f[i,j]<=(nodes-1)*x[i,j])
 ```
-### tsp_flujo_mejorado.py
+### [tsp_flujo_mejorado.py](https://github.com/alu0100976731/python_logistica/blob/master/src/tsp_flujo_mejorado.py)
 Mejora el modelo anterior de las fij reforzando las restricciones
 ```
 for i in range(1,nodes):
