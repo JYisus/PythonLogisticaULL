@@ -14,7 +14,6 @@ for i in range(nodes):
     cost.append(row)
 for i in range(nodes):
     cost[i][i] = 200
-print(cost)
 # cost = [[0,10,15,20],
 #    [10,0,35,25],
 #    [15,35,0,30],
@@ -47,7 +46,6 @@ for i in range(1,nodes):
         if i != j:
             for k in range(1, nodes):
                 if (k != i) & (k != j):
-                    print('i = '+str(i)+'\tj = ' + str(j)+'\tk = '+str(k))
                     solver.Add( v[i,j]+v[j,k] <= v[i,k]+1 )
 
 for i in range(1,nodes):
