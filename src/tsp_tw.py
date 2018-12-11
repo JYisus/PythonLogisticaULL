@@ -4,16 +4,44 @@ import random as rand
 solver = pywraplp.Solver('TSP Time Windows', pywraplp.Solver.CBC_MIXED_INTEGER_PROGRAMMING)
 
 # x and y are integer non-negative variables.
-nodes = 6
+nodes = 5
 rand.seed(42)
-cost = { (i,j): rand.randint(10,100) for i in range(nodes) for j in range(nodes) if i!=j}
-print(cost)
+cost = { (i,j): rand.randint(1,10) for i in range(nodes) for j in range(nodes) if i!=j}
+
+""" EJEMPLO A MANO
+cost = {(i,j): 0 for i in range(nodes) for j in range(nodes) if i!=j }
+cost[0,1] = 6
+cost[0,2] = 3
+cost[0,3] = 4
+cost[0,4] = 4
+cost[1,0] = 2
+cost[1,2] = 1
+cost[1,3] = 3
+cost[1,4] = 3
+cost[2,0] = 7
+cost[2,1] = 5
+cost[2,3] = 4
+cost[2,4] = 4
+cost[3,0] = 8
+cost[3,1] = 2
+cost[3,2] = 4
+cost[3,4] = 4
+cost[4,0] = 4
+cost[4,1] = 4
+cost[4,2] = 4
+cost[4,4] = 4
+
+e = [1400, 900, 1200, 800, 700]
+l = [1400, 1100, 1300, 1000, 900]
+t = {(i,j): 100 for i in range(nodes) for j in range(nodes) if i!=j}
+s ={i: 100 for i in range(nodes)} """
+#print(cost)
 # early time
 e = {i: rand.randint(800, 1900) for i in range(nodes)}
 """ e = []
 for i in range(1,nodes):
     e.append(rand.randint(800,1900)) """
-print("Early times: " + str(e))
+# print("Early times: " + str(e))
 # late time
 l = []
 for i in range(nodes):
@@ -21,17 +49,19 @@ for i in range(nodes):
     while aux <= e[i]:
         aux = rand.randint(900,2000)
     l.append(aux)
-l[0] = e[0]
-print("Late times: " + str(l))
+
+e[0] = l[0]
+# print("Late times: " + str(l))
+
 # service time
-s ={i: rand.randint(10,100) for i in range(nodes)}
+s ={i: rand.randint(100,100) for i in range(nodes)}
 
 """ s = []
 for i in range(1,nodes):
     s.append(rand.randint(100,200)) """
-print("Service times: " + str(s))
+# print("Service times: " + str(s))
 # tiempos de ruta
-t = {(i,j): rand.randint(10,500) for i in range(nodes) for j in range(nodes) if i!=j}
+t = {(i,j): rand.randint(100,100) for i in range(nodes) for j in range(nodes) if i!=j}
 """ t = []
 for i in range(nodes):
     aux = []
@@ -39,6 +69,11 @@ for i in range(nodes):
         aux.append(rand.randint(100,200))
     t.append(aux) """
 # print("Tiempos de ruta: " + str(t))
+
+e = [1400, 900, 1200, 800, 700]
+l = [1400, 1100, 1300, 1000, 900]
+t = {(i,j): 100 for i in range(nodes) for j in range(nodes) if i!=j}
+s ={i: 100 for i in range(nodes)}
 
 x = {}
 for i in range(nodes):
@@ -64,7 +99,7 @@ for i in range(1,nodes):
 for i in range(1,nodes):
     for j in range(1,nodes):
         if i!=j:
-            solver.Add(u[j]>=(u[i]+(s[i]+t[i,j])*x[i,j]-(max(l)-min(l)-min(s))*(1-x[i,j])))
+            solver.Add(u[j]>=u[i]+(s[i]+t[i,j])*x[i,j]-(l[i]-e[j])*(1-x[i,j]))
 
 sol = solver.Solve()
 if sol == solver.OPTIMAL:
