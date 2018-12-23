@@ -41,7 +41,7 @@ for i in range(1,nodes):
         if i != j:
             for k in range(1, nodes):
                 if (k != i) & (k != j):
-                    solver.Add(v[i,j]+v[j,k] <= v[i,k]+1 )
+                    solver.Add( x[i,k] + v[i,j]+v[j,k] <= v[i,k]+1 )
 
 for i in range(1,nodes):
     for j in range(1,nodes):
