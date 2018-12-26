@@ -5,13 +5,11 @@ solver = pywraplp.Solver('TSP2', pywraplp.Solver.CBC_MIXED_INTEGER_PROGRAMMING)
 
 # x and y are integer non-negative variables.
 nodes = 10
+# cost = []
 rand.seed(42)
+
 cost = { (i,j): rand.randint(10,100) for i in range(nodes) for j in range(nodes) if i!=j}
-x = {}
-for i in range(nodes):
-    for j in range(nodes):
-        if i!=j:
-            x[i, j] = solver.BoolVar('x[%i, %i]' % (i, j))
+x = { (i,j): solver.BoolVar('x[%i, %i]' % (i, j)) for i in range(nodes) for j in range(nodes) if i!=j}
 u = {}
 for i in range(1,nodes):
     u[i] = solver.IntVar(1.0,solver.infinity(),'u[%i]' % (i))

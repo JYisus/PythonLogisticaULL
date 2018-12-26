@@ -4,14 +4,12 @@ import random as rand
 solver = pywraplp.Solver('MiPrimerProblemaEntero', pywraplp.Solver.CBC_MIXED_INTEGER_PROGRAMMING)
 
 # x and y are integer non-negative variables.
-nodes = 6
+nodes = 10
+# cost = []
 rand.seed(42)
+
 cost = { (i,j): rand.randint(10,100) for i in range(nodes) for j in range(nodes) if i!=j}
-x = {}
-for i in range(nodes):
-    for j in range(nodes):
-        if i!=j:
-            x[i, j] = solver.BoolVar('x[%i, %i]' % (i, j))
+x = { (i,j): solver.BoolVar('x[%i, %i]' % (i, j)) for i in range(nodes) for j in range(nodes) if i!=j}
 # cost = [[0,10,15,20],
 #    [10,0,35,25],
 #    [15,35,0,30],

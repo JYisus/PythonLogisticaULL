@@ -75,6 +75,9 @@ l = [1400, 1100, 1300, 1000, 900]
 t = {(i,j): 100 for i in range(nodes) for j in range(nodes) if i!=j}
 s ={i: 100 for i in range(nodes)}
 
+print("cost:",cost)
+print("t:",t)
+print("s:",s)
 x = {}
 for i in range(nodes):
     for j in range(nodes):
@@ -103,9 +106,11 @@ for i in range(1,nodes):
 
 sol = solver.Solve()
 if sol == solver.OPTIMAL:
+    print('Wall time = ' + str(solver.WallTime()) + ' ms')
+    print('Número de variables =', solver.NumVariables())
+    print('Número de restricciones =', solver.NumConstraints())
     print('Costo total =', solver.Objective().Value())
     recorrido = '0'
-    print(x)
     i=0
     while i != -1:
         for j in range(nodes):

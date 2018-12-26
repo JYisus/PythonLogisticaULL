@@ -4,34 +4,32 @@ import random as rand
 solver = pywraplp.Solver('TSPflujo', pywraplp.Solver.CBC_MIXED_INTEGER_PROGRAMMING)
 
 # x and y are integer non-negative variables.
-nodes = 6
+nodes = 10
 rand.seed(42)
 cost = { (i,j): rand.randint(10,100) for i in range(nodes) for j in range(nodes) if i!=j}
-
-x = {}
-for i in range(nodes):
-    for j in range(nodes):
-        x[i, j] = solver.BoolVar('x[%i, %i]' % (i, j))
+x = { (i,j): solver.BoolVar('x[%i, %i]' % (i, j)) for i in range(nodes) for j in range(nodes) if i!=j}
 
 f = {}
 for i in range(nodes):
     for j in range(nodes):
-        f[i, j] = solver.IntVar(0.0,solver.infinity(),'f[%i, %i]' % (i, j))
+        if i!=j:
+            f[i, j] = solver.IntVar(0.0,solver.infinity(),'f[%i, %i]' % (i, j))
 
 solver.Minimize(solver.Sum([cost[i,j]*x[i,j] for i in range(nodes) for j in range(nodes) if i!=j]))
 
 for i in range(nodes):
-    solver.Add(solver.Sum([x[i,j] for j in range(nodes)]) == 1)
+    solver.Add(solver.Sum([x[i,j] for j in range(nodes) if i!=j]) == 1)
 
 for j in range(nodes):
-    solver.Add(solver.Sum([x[i,j] for i in range(nodes)]) == 1)
+    solver.Add(solver.Sum([x[i,j] for i in range(nodes) if i!=j]) == 1)
 
 for i in range(1,nodes):
-    solver.Add((solver.Sum([f[i,j] for j in range(nodes)])-solver.Sum([f[j,i] for j in range(nodes)]))==1)
-    #solver.Add(solver.Sum(f[i,j] for i in range(1,nodes) for j in range(1,nodes))-solver.Sum[j,i] for i in range(1,nodes) for j in range(1,nodes))
+    solver.Add((solver.Sum([f[i,j] for j in range(nodes) if i!=j])-solver.Sum([f[j,i] for j in range(nodes) if i!=j]))==1)
+    
 for i in range(nodes):
     for j in range(nodes):
-        solver.Add(0<=f[i,j]<=(nodes-1)*x[i,j])
+        if i!=j:
+            solver.Add(0<=f[i,j]<=(nodes-1)*x[i,j])
 
 sol = solver.Solve()
 if sol == solver.OPTIMAL:
